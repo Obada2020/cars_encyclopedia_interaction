@@ -1,0 +1,39 @@
+name: cars_encyclopedia_interaction
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.2 <4.0.0'
+
+dependencies:
+  animated_theme_switcher: ^2.0.8
+  animations: ^2.0.7
+  card_slider: ^1.0.5
+  carousel_slider: ^4.2.1
+  flutter:
+    sdk: flutter
+  flutter_card_swiper: ^6.0.0
+  google_fonts: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+   - assets/
+   - assets/font/
+  fonts:
+    - family: Plus Jakarta Sans
+      fonts:
+        - asset: assets/font/PlusJakartaSans-Bold.ttf
+        - asset: assets/font/PlusJakartaSans-Regular.ttf
+        - asset: assets/font/PlusJakartaSans-SemiBold.ttf
+        - asset: assets/font/PlusJakartaSans-Medium.ttf
+        - asset: assets/font/PlusJakartaSans-Light.ttf
+        - asset: assets/font/PlusJakartaSans-ExtraLight.ttf
+        
