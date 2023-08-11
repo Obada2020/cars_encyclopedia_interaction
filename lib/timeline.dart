@@ -283,26 +283,6 @@ class _MainAppState extends State<MainApp> {
                 ),
               ),
             ),
-            // SizedBox(
-            //   // height: MediaQuery.of(context).size.height * 0.58,
-            //   height: MediaQuery.of(context).size.height * 2,
-            //   child: PageView.builder(
-            //     clipBehavior: Clip.none,
-            //     controller: PageController(
-            //       viewportFraction: 1,
-            //     ),
-            //     itemBuilder: (context, index) => valuesWidget[index],
-            //     itemCount: valuesWidget.length,
-            //   ),
-            // ),
-
-            // CardSlider(
-            //   cards: valuesWidget,
-            //   cardWidth: MediaQuery.of(context).size.width,
-            //   containerHeight: MediaQuery.of(context).size.height,
-            //   cardHeight: MediaQuery.of(context).size.height,
-            //   // cardHeightOffset: 0,
-            // )
           ],
         ),
       ),
