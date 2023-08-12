@@ -80,7 +80,7 @@ class DetailsPageState extends State<DetailsPage>
         return Future.value(true);
       },
       child: ThemeProvider(
-        duration: const Duration(milliseconds: 1200),
+        duration: const Duration(milliseconds: 1300),
         initTheme: ThemeData(
           primaryColor: Colors.black,
           primaryColorLight: Colors.white,
@@ -119,7 +119,45 @@ class DetailsPageState extends State<DetailsPage>
             ),
             child: Column(
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    crossFadeState: isExpanded
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    secondChild: const SizedBox.shrink(),
+                    firstChild: IconButton(
+                      onPressed: () async {
+                        RenderBox renderbox = mybuttonkey.currentContext!
+                            .findRenderObject() as RenderBox;
+                        Offset position = renderbox.localToGlobal(Offset.zero);
+                        final x = position.dx;
+                        final y = position.dy;
+                        log(x.toString());
+                        log(y.toString());
+                        GestureBinding.instance.handlePointerEvent(
+                            PointerDownEvent(position: Offset(x, y)));
+                        GestureBinding.instance.handlePointerEvent(
+                            PointerUpEvent(position: Offset(x, y)));
+                        await Future.delayed(
+                            const Duration(milliseconds: 1000), () {});
+                        setState(() {
+                          isExpanded = false;
+                        });
+                        await Future.delayed(
+                            const Duration(milliseconds: 800), () {});
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.navigate_before,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -132,7 +170,7 @@ class DetailsPageState extends State<DetailsPage>
                     )
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -254,13 +292,7 @@ class DetailsPageState extends State<DetailsPage>
                     ],
                   ),
                 ),
-                // Divider(
-                //   color: y.textTheme.titleLarge!.color!,
-                //   thickness: 1,
-                //   indent: 30,
-                //   endIndent: 30,
-                // ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Row(
@@ -297,82 +329,94 @@ class DetailsPageState extends State<DetailsPage>
                         .fade(),
                   ),
                 ),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Description', style: y.textTheme.titleSmall),
+                        const SizedBox(height: 10),
+                        Text(valuesDataColors[widget.index].description,
+                            style: y.textTheme.titleMedium),
+                      ],
+                    ),
+                  ),
+                )
+                    .animate(
+                      delay: const Duration(milliseconds: 800),
+                    )
+                    .slideY(
+                      duration: const Duration(milliseconds: 200),
+                      // delay: const Duration(milliseconds: 400),
+                      begin: 1,
+                    )
+                    .fade(),
                 const SizedBox(
-                  height: 200,
+                  height: 100,
                 ),
                 ThemeSwitcher(
                   clipper: const ThemeSwitcherCircleClipper(),
                   builder: (context) {
                     return IconButton(
-                        key: mybuttonkey,
-                        color: Colors.transparent,
-                        icon: const SizedBox(
-                          width: 20,
-                        ),
-                        onPressed: () {
-                          log('message');
-                          // if (!isExpanded) {
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            ThemeSwitcher.of(context).changeTheme(
-                              theme: y.brightness == Brightness.dark
-                                  ? ThemeData(
-                                      primaryColor: Colors.white,
-                                      brightness: Brightness.light,
-                                      textTheme:
-                                          GoogleFonts.abrilFatfaceTextTheme(
-                                              Theme.of(context)
-                                                  .textTheme
-                                                  .copyWith(
-                                                    titleLarge: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 35,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  )).copyWith(
-                                        titleSmall: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                        titleMedium: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                      key: mybuttonkey,
+                      color: Colors.transparent,
+                      icon: const SizedBox(
+                        width: 20,
+                      ),
+                      onPressed: () {
+                        log('message');
+                        // if (!isExpanded) {
+                        Future.delayed(const Duration(milliseconds: 300), () {
+                          ThemeSwitcher.of(context).changeTheme(
+                            theme: y.brightness == Brightness.dark
+                                ? ThemeData(
+                                    primaryColor: Colors.white,
+                                    brightness: Brightness.light,
+                                    textTheme:
+                                        GoogleFonts.abrilFatfaceTextTheme(
+                                            Theme.of(context)
+                                                .textTheme
+                                                .copyWith(
+                                                  titleLarge: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 35,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )).copyWith(
+                                      titleSmall: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
                                       ),
-                                    )
-                                  : ThemeData(
-                                      primaryColor: Colors.black,
-                                      brightness: Brightness.dark,
-                                      textTheme:
-                                          GoogleFonts.abrilFatfaceTextTheme(
-                                              Theme.of(context)
-                                                  .textTheme
-                                                  .copyWith(
-                                                    titleLarge: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 35,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  )),
-                                      // ).copyWith(
-                                      //   titleSmall: const TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontSize: 16,
-                                      //   ),
-                                      //   titleMedium: const TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontSize: 18,
-                                      //   ),
-                                      // ),
+                                      titleMedium: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                              isReversed: y.brightness != Brightness.dark
-                                  ? true
-                                  : false,
-                            );
-                          });
+                                  )
+                                : ThemeData(
+                                    primaryColor: Colors.black,
+                                    brightness: Brightness.dark,
+                                    textTheme:
+                                        GoogleFonts.abrilFatfaceTextTheme(
+                                      Theme.of(context).textTheme.copyWith(
+                                            titleLarge: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 35,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                            isReversed:
+                                y.brightness != Brightness.dark ? true : false,
+                          );
                         });
+                      },
+                    );
                   },
                 ),
               ],

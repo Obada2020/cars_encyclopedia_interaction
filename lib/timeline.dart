@@ -21,6 +21,7 @@ class _MainAppState extends State<MainApp> {
   var carouelController = CarouselController();
   var cardSwiperController = CardSwiperController();
   List<Widget> valuesWidget = [];
+  bool isExpanded = false;
   @override
   void initState() {
     for (int i = 0; i < valuesDataColors.length; i++) {
@@ -30,6 +31,8 @@ class _MainAppState extends State<MainApp> {
             borderRadius: BorderRadius.circular(8),
           ),
           closedElevation: 0,
+          tappable: true,
+          
           openColor: Colors.black,
           closedColor: Colors.black,
           clipBehavior: Clip.none,
@@ -181,65 +184,101 @@ class _MainAppState extends State<MainApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Timeline', style: TextStyle(color: Colors.black)),
+          title: SizedBox(
+            width: 150,
+            height: 50,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AnimatedPositioned(
+                    duration: const Duration(milliseconds: 800),
+                    top: isExpanded ? -100 : 8,
+                    child: const Text('Timeline',
+                        style: TextStyle(color: Colors.black))),
+              ],
+            ),
+          ),
           backgroundColor: Colors.grey[50],
           centerTitle: true,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: Colors.black),
-            onPressed: () {},
+          leading: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 800),
+                top: isExpanded ? -100 : 0,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                      color: Colors.black),
+                  onPressed: () {},
+                ),
+              ),
+            ],
           ),
         ),
         body: ListView(
           clipBehavior: Clip.none,
           children: [
             const SizedBox(height: 30),
-            CarouselSlider.builder(
-              carouselController: carouelController,
-              options: CarouselOptions(
-                viewportFraction: 0.38,
-                aspectRatio: 2.0,
-                initialPage: 0,
-                reverse: false,
-                autoPlay: false,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                onPageChanged: (index, reason) {
-                  setState(
-                    () {
-                      _current = index;
-                    },
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-              ),
-              itemCount: dates.length,
-              itemBuilder:
-                  (BuildContext context, int itemIndex, int pageViewIndex) =>
-                      AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 200),
-                style: TextStyle(
-                  foreground: _current != itemIndex
-                      ? (Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 1.5
-                        ..color = Colors.black)
-                      : Paint(),
-                  fontSize: _current == itemIndex ? 45 : 35,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: _current == itemIndex
-                      ? FontWeight.bold
-                      : FontWeight.normal,
-                ),
-                child: Text(
-                  dates[itemIndex].toString(),
-                ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.25,
+              child: Stack(
+                children: [
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 800),
+                    top: isExpanded ? -100 : 0,
+                    child: SizedBox(
+                      width: MediaQuery.sizeOf(context).width,
+                      child: CarouselSlider.builder(
+                        carouselController: carouelController,
+                        options: CarouselOptions(
+                          viewportFraction: 0.38,
+                          aspectRatio: 2.0,
+                          initialPage: 0,
+                          reverse: false,
+                          autoPlay: false,
+                          autoPlayInterval: const Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          onPageChanged: (index, reason) {
+                            setState(
+                              () {
+                                _current = index;
+                              },
+                            );
+                          },
+                          scrollDirection: Axis.horizontal,
+                        ),
+                        itemCount: dates.length,
+                        itemBuilder: (BuildContext context, int itemIndex,
+                                int pageViewIndex) =>
+                            AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          style: TextStyle(
+                            foreground: _current != itemIndex
+                                ? (Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 1.5
+                                  ..color = Colors.black)
+                                : Paint(),
+                            fontSize: _current == itemIndex ? 55 : 45,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: _current == itemIndex
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                          child: Text(
+                            dates[itemIndex].toString(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.62,
+              height: MediaQuery.of(context).size.height * 0.65,
               child: CardSwiper(
                 controller: cardSwiperController,
                 onSwipe: (x, y, CardSwiperDirection z) {
@@ -260,27 +299,7 @@ class _MainAppState extends State<MainApp> {
                 cardsCount: valuesWidget.length,
                 cardBuilder:
                     (context, index, percentThresholdX, percentThresholdY) =>
-                        InkWell(
-                  onTap: () {
-                    log('message');
-                    OpenContainer(
-                      closedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      closedElevation: 0,
-                      closedColor: Colors.transparent,
-                      openColor: Colors.transparent,
-                      transitionDuration: const Duration(milliseconds: 500),
-                      closedBuilder: (context, openContainer) =>
-                          const MainApp(),
-                      openBuilder: (context, _) => DetailsPage(
-                        car: valuesDataColors[index],
-                        index: index,
-                      ),
-                    );
-                  },
-                  child: valuesWidget[index],
-                ),
+                        valuesWidget[index],
               ),
             ),
           ],
