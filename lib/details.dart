@@ -194,6 +194,7 @@ class DetailsPageState extends State<DetailsPage>
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
+                        color: y.textTheme.titleLarge!.color!,
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 0.5
